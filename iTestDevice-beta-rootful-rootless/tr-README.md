@@ -20,7 +20,6 @@
    /battery   → Pil durumunu gösterir.  
    /help      → Kullanılabilir komutları gösterir.  
    /exit      → Programdan çıkar.
-
    /safe      → Safe Moda Girer.
    
 ⚠️ iPhone’unuzun jailbreakli olduğundan ve SSH’nin açık olduğundan emin olun.
