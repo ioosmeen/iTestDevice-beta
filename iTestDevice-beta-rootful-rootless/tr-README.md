@@ -5,10 +5,10 @@
 
 2. `install_dependencies.bat` dosyasını çalıştırarak gerekli Python kütüphanelerini (örneğin paramiko) yükleyin.
 
-3. `iTest.py` dosyasını açıp iPhone'unuzun IP adresini gerekirse aşağıdaki satırda güncelleyin:  
+3. `iTester.py` dosyasını açıp iPhone'unuzun IP adresini gerekirse aşağıdaki satırda güncelleyin:  
       HOST = "192.168.1.184"
 
-4. `run_iTest.bat` dosyasını çalıştırın.
+4. `run_iTester.bat` dosyasını çalıştırın.
 
 5. Her şey doğruysa, terminalde iPhone’unuzdan gerçek zamanlı loglar göreceksiniz.
 
