@@ -315,7 +315,7 @@ def command_loop(ssh):
                 elif cmd == "/restart":
                     print(msg("restarting"))
                     try:
-                        ssh.exec_command("killall -9 SpringBoard")
+                        ssh.exec_command("reboot")
                         print(msg("restart_success"))
                     except Exception as e:
                         print(msg("restart_fail", err=e))
