@@ -44,6 +44,7 @@ Available commands:
 /exit      - Exit the program.
 /battery   - Show battery status.
 /checkjb   - Show jailbreak status.
+/safe      - Enter Safe Mode.
 """,
         "restarting": "🔄 Restarting iPhone...",
         "restart_success": "✅ Restart command sent successfully.",
@@ -53,9 +54,12 @@ Available commands:
         "jailbreak_yes_rootless": "🔓 Jailbreak detected! Rootless jailbreak.",
         "jailbreak_yes_rootful": "🔓 Jailbreak detected! Rootful jailbreak.",
         "battery_status": "🔋 Battery Level: {level}% — State: {state}",
+        "safe_mode_start": "🔧 Entering Safe Mode...",
+        "safe_mode_success": "✅ Safe Mode command sent successfully.",
+        "safe_mode_fail": "❌ Failed to enter Safe Mode: {err}",
     },
     "TR": {
-        "welcome": "🔍 Takip başladı. Uygulamaları öldürmek için '/killos', dil değiştirmek için '/lan' yazın, jailbreakinizi öğrenmek için '/checkjb ' yazın.",
+        "welcome": "🔍 Takip başladı. Uygulamaları öldürmek için '/killos', dil değiştirmek için '/lan' yazın, jailbreakinizi öğrenmek için '/checkjb' yazın.",
         "killos_prompt": "📋 Açık uygulamalar:\n",
         "no_apps": "❌ Hiç açık uygulama bulunamadı.",
         "invalid_choice": "❌ Geçersiz seçim.",
@@ -83,6 +87,7 @@ Mevcut komutlar:
 /exit      - Programdan çık.
 /battery   - Pil durumunu göster.
 /checkjb   - Jailbreak durumunu göster.
+/safe      - Safe Mode'a geç.
 """,
         "restarting": "🔄 iPhone yeniden başlatılıyor...",
         "restart_success": "✅ Yeniden başlatma komutu başarıyla gönderildi.",
@@ -92,6 +97,9 @@ Mevcut komutlar:
         "jailbreak_yes_rootless": "🔓 Jailbreak algılandı! Rootless jailbreak.",
         "jailbreak_yes_rootful": "🔓 Jailbreak algılandı! Rootful jailbreak.",
         "battery_status": "🔋 Pil Seviyesi: {level}% — Durum: {state}",
+        "safe_mode_start": "🔧 Safe Mode'a geçiliyor...",
+        "safe_mode_success": "✅ Safe Mode komutu başarıyla gönderildi.",
+        "safe_mode_fail": "❌ Safe Mode'a geçiş başarısız: {err}",
     }
 }
 
@@ -312,6 +320,14 @@ def command_loop(ssh):
                     except Exception as e:
                         print(msg("restart_fail", err=e))
 
+                elif cmd == "/safe":
+                    print(msg("safe_mode_start"))
+                    try:
+                        ssh.exec_command("killall -SEGV SpringBoard")
+                        print(msg("safe_mode_success"))
+                    except Exception as e:
+                        print(msg("safe_mode_fail", err=e))
+
                 elif cmd == "/exit":
                     stop_flag = True
                     print("Exiting...")
@@ -331,27 +347,28 @@ def command_loop(ssh):
                         print(msg("jailbreak_yes_rootful"))
 
                 else:
-                    print(msg("invalid_choice"))
+                    print(msg("help_text"))
+
             else:
-                time.sleep(1)
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            stop_flag = True
         except Exception as e:
-            print(f"Error in command loop: {e}")
-            time.sleep(2)
+            print(f"Command loop error: {e}")
+            time.sleep(1)
 
 def main():
     global stop_flag
-
     ssh = create_ssh_client()
 
-    t_monitor = threading.Thread(target=monitor, args=(ssh,))
-    t_command = threading.Thread(target=command_loop, args=(ssh,))
+    monitor_thread = threading.Thread(target=monitor, args=(ssh,))
+    monitor_thread.daemon = True
+    monitor_thread.start()
 
-    t_monitor.start()
-    t_command.start()
+    command_loop(ssh)
 
-    t_command.join()
     stop_flag = True
-    t_monitor.join()
+    ssh.close()
 
 if __name__ == "__main__":
     main()
