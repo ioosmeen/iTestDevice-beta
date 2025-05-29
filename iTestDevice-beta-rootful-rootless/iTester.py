@@ -8,7 +8,7 @@ USERNAME = "root"
 PASSWORD = "alpine"
 RAM_ALERT_THRESHOLD = 100  # MB
 SPECIAL_APPS = ["Cydia", "Sileo", "Zebra"]
-LOG_FILE = "log.txt"
+LOG_FILE = "app.log"
 
 stop_flag = False
 command_flag = False
