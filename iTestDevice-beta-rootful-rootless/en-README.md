@@ -21,5 +21,6 @@
    /help      → Show available commands.  
    /exit      → Exit the program.
    /safe      → Enters safe mode
+   
 ⚠️ Make sure your iPhone is jailbroken and SSH is enabled.
 ------------------------------------------------------------
