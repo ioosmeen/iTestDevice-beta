@@ -3,7 +3,7 @@ import time
 import threading
 from datetime import datetime
 
-HOST = "192.168.1.184"
+HOST = "192.168.1.100"
 USERNAME = "root"
 PASSWORD = "alpine"
 RAM_ALERT_THRESHOLD = 100  # MB
