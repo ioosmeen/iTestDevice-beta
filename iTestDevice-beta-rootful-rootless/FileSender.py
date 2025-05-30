@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog
 from datetime import datetime
 
-HOST = "192.168.1.184"
+HOST = "192.168.1.100"
 PORT = 22
 USERNAME = "root"
 PASSWORD = "alpine"
