@@ -3,7 +3,7 @@ import socket
 from datetime import datetime
 
 # SSH Bağlantı bilgileri
-HOST = "192.168.1.184"
+HOST = "192.168.1.100"
 PORT = 22
 USERNAME = "root"
 PASSWORD = "alpine"
