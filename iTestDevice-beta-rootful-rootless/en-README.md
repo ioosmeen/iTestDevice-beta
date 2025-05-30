@@ -5,7 +5,7 @@
 
 2. Run the script `install_dependencies.bat` to install required Python libraries (like paramiko).
 
-3. Edit the file `iTester.py` and update the following lines with your iPhone's IP address if needed:  
+3. Edit the file "iTester.py" and update the following lines with your iPhone's IP address if needed:  
       HOST = "192.168.1.184"
 
 4. Run the script using `run_iTester.bat`.
@@ -21,7 +21,7 @@
    /help      → Show available commands.  
    /exit      → Exit the program.
 
-    /safe      → Enters safe mode
-   
+7. If you want to send a file or folder from your PC, run `RUNME-FileSender.bat`
+
 ⚠️ Make sure your iPhone is jailbroken and SSH is enabled.
 ------------------------------------------------------------

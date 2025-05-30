@@ -21,7 +21,7 @@
    /help      → Kullanılabilir komutları gösterir.  
    /exit      → Programdan çıkar.
 
-    /safe      → Safe Moda Girer.
-   
+7. PC'den iOS'a Dosya Yada Klasör Göndermek İsterseniz `RUNME-FileSender.bat` çalıştırın.
+
 ⚠️ iPhone’unuzun jailbreakli olduğundan ve SSH’nin açık olduğundan emin olun.
 ------------------------------------------------------------
