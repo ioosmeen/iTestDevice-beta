@@ -14,10 +14,19 @@ def create_ssh_client():
     ssh.connect(HOST, username=USERNAME, password=PASSWORD)
     return ssh
 
-def list_apps_from_path(ssh, base_path, maxdepth=3):
-    cmd = f"find {base_path} -maxdepth {maxdepth} -name '*.app'"
-    stdin, stdout, stderr = ssh.exec_command(cmd)
-    apps = stdout.read().decode().splitlines()
+def list_apps_from_multiple_paths(ssh):
+    paths = [
+        "/var/containers/Bundle/Application",
+        "/Applications",
+        "/System/Library/CoreServices"
+    ]
+    apps = []
+    for base_path in paths:
+        # Sadece klasörleri ara, dosyalar olmasın
+        cmd = f"find {base_path} -maxdepth 3 -type d -name '*.app' 2>/dev/null"
+        stdin, stdout, stderr = ssh.exec_command(cmd)
+        result = stdout.read().decode().splitlines()
+        apps.extend(result)
     return apps
 
 def list_running_apps(ssh):
@@ -31,29 +40,21 @@ def list_running_apps(ssh):
             parts = line.split()
             app_path = next((p for p in parts if ".app/" in p), None)
             if app_path:
+                # Burada app_path'nin sonu mutlaka .app ile bitmeli
+                # Eğer bitmiyorsa yolun üst dizinine çıkabiliriz:
+                if not app_path.endswith(".app"):
+                    app_path = app_path.split(".app")[0] + ".app"
                 app_name = os.path.basename(app_path).replace(".app", "")
                 running_apps[app_name] = app_path
 
-    # /var/containers/Bundle/Application içindeki tüm uygulamalar
-    var_apps = list_apps_from_path(ssh, "/var/containers/Bundle/Application", maxdepth=3)
-    # /Applications içindeki tüm uygulamalar (SpringBoard dahil)
-    app_apps = list_apps_from_path(ssh, "/Applications", maxdepth=2)
+    all_apps_list = list_apps_from_multiple_paths(ssh)
 
-    # Tüm uygulamaları (app_name: tam_yol) sözlük olarak topla
     all_apps = {}
 
-    # Çalışan uygulamalar
     for app_name, path in running_apps.items():
         all_apps[app_name] = path
 
-    # /var/containers/Bundle/Application içindekiler
-    for path in var_apps:
-        app_name = os.path.basename(path).replace(".app", "")
-        if app_name not in all_apps:
-            all_apps[app_name] = path
-
-    # /Applications içindekiler
-    for path in app_apps:
+    for path in all_apps_list:
         app_name = os.path.basename(path).replace(".app", "")
         if app_name not in all_apps:
             all_apps[app_name] = path
